@@ -1,6 +1,9 @@
 
 public class EmployeeBook {
-    private Employee[] employees = new Employee[10];
+    private final Employee[] employees = new Employee[10];
+
+    private final int lowDep = 1;
+    private final int highDep = 5;
 
     {
         addEmployee("Афанасьев", "Анатолий", "Евгеньевич", 2, 145_000);
@@ -14,7 +17,7 @@ public class EmployeeBook {
     Добавить/удалить сотрудника
      */
     public void addEmployee(String secondName, String firstName, String middleName, int department, double salary) {
-        if (department > 5 || department < 1 || salary < 0) {
+        if (department > highDep || department < lowDep || salary < 0) {
             System.out.println("Всего 5 отделов в компании от 1 до 5. Зарплата не может быть отрицательной");
             return;
         }
@@ -69,8 +72,9 @@ public class EmployeeBook {
             System.out.println("Сотрудник не найден.");
         }
     }
+
     public void changeDepartment(String secondName, String firstName, String middleName, int department) {
-        if (department < 1 || department > 5) {
+        if (department < lowDep || department > highDep) {
             System.out.println("В компании есть всего 5 отедлов. 1-5");
             return;
         }
@@ -96,7 +100,7 @@ public class EmployeeBook {
 
     public void showAllByDepartments() {
         int counter;
-        for (int i = 1; i < 6; i++) {
+        for (int i = lowDep; i <= highDep; i++) {
             counter = 0;
             System.out.println("Отдел №" + i);
             for (Employee emp : employees) {
@@ -110,6 +114,7 @@ public class EmployeeBook {
             }
         }
     }
+
     public double getMonthSumSalary() {
         double sum = 0;
         for (Employee emp : employees) {
@@ -122,40 +127,26 @@ public class EmployeeBook {
 
     public Employee findLowPaidEmployee() {
         double min = Integer.MAX_VALUE;
+        Employee temp = null;
         for (Employee emp : employees) {
-            if (emp != null) {
-                if (emp.getSalary() < min) {
-                    min = emp.getSalary();
-                }
+            if (emp != null && emp.getSalary() < min) {
+                min = emp.getSalary();
+                temp = emp;
             }
         }
-        for (Employee emp : employees) {
-            if (emp != null) {
-                if (emp.getSalary() == min) {
-                    return emp;
-                }
-            }
-        }
-        return null;
+        return temp;
     }
 
     public Employee findHighPaidEmployee() {
         double max = Integer.MIN_VALUE;
+        Employee temp = null;
         for (Employee emp : employees) {
-            if (emp != null) {
-                if (emp.getSalary() > max) {
-                    max = emp.getSalary();
-                }
+            if (emp != null && emp.getSalary() > max) {
+                max = emp.getSalary();
+                temp = emp;
             }
         }
-        for (Employee emp : employees) {
-            if (emp != null) {
-                if (emp.getSalary() == max) {
-                    return emp;
-                }
-            }
-        }
-        return null;
+        return temp;
     }
 
     public double getAverageSalary() {
@@ -182,51 +173,41 @@ public class EmployeeBook {
     Методы которые принимают номер отдела в качестве параметра
      */
     public Employee findLowPaidEmployee(int department) {
-        if (department < 1 || department > 5) {
+        if (department < lowDep || department > highDep) {
             System.out.println("Такого отдела нет.");
             return null;
         }
 
         double min = Integer.MAX_VALUE;
+        Employee temp = null;
         for (Employee emp : employees) {
             if (emp != null && emp.getDepartment() == department) {
                 if (emp.getSalary() < min) {
                     min = emp.getSalary();
+                    temp = emp;
                 }
             }
         }
-        for (Employee emp : employees) {
-            if (emp != null && emp.getDepartment() == department) {
-                if (emp.getSalary() == min) {
-                    return emp;
-                }
-            }
-        }
-        return null;
+        return temp;
     }
 
     public Employee findHighPaidEmployee(int department) {
-        if (department < 1 || department > 5) {
+        if (department < lowDep || department > highDep) {
             System.out.println("Такого отдела нет.");
             return null;
         }
 
         double max = Integer.MIN_VALUE;
+        Employee temp = null;
         for (Employee emp : employees) {
             if (emp != null && emp.getDepartment() == department) {
                 if (emp.getSalary() > max) {
                     max = emp.getSalary();
+                    temp = emp;
                 }
             }
         }
-        for (Employee emp : employees) {
-            if (emp != null && emp.getDepartment() == department) {
-                if (emp.getSalary() == max) {
-                    return emp;
-                }
-            }
-        }
-        return null;
+        return temp;
     }
 
     public double getMonthSumSalary(int department) {
@@ -308,6 +289,7 @@ public class EmployeeBook {
         }
         return null;
     }
+
     private int getNumberOfEmployees() {
         int number = 0;
         for (Employee emp : employees) {
@@ -328,22 +310,3 @@ public class EmployeeBook {
         return number;
     }
 }
-
-
-
-
-
-/*
-public void removeEmployee(String secondName, String firstName, String middleName) {
-        for (int i = 0; i < employees.length; i++) {
-            if (employees[i] == null) {
-                continue;
-            }
-            if (employees[i].getSecondName().equals(secondName) && employees[i].getFirstName().equals(firstName) && employees[i].getMiddleName().equals(middleName)) {
-                employees[i] = null;
-                return;
-            }
-        }
-        System.out.println("В книге сотрудников нет сотрудника с указанными ФИО.");
-    }
- */
